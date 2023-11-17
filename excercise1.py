@@ -144,3 +144,47 @@ def by_name(t):
     return t[0]
 L2 = sorted(L,key = by_name)
 print(L2)
+
+#利用闭包返回一个计数器函数，每次调用它返回递增整数：
+def createcounter():
+    j = 0
+    def counter():
+        nonlocal j
+        j+=1
+        return j
+    return counter
+#请再注意一点，当我们调用lazy_sum()时，每次调用都会返回一个新的函数，即使传入相同的参数
+#请用匿名函数改造下面的代码：
+def is_odd(n):
+    return n % 2 == 1
+
+L = list(filter(is_odd, range(1, 20)))
+print(L)
+L = list(filter(lambda x: x%2 ==1, range(1, 20)))
+print(L)
+
+#装饰器
+#函数对象有一个__name__属性（注意：是前后各两个下划线），可以拿到函数的名字
+def now():
+    print("2023年11月16日")
+f = now
+print(now.__name__)
+print(f.__name__)
+
+#请设计一个decorator，它可作用于任何函数上，并打印该函数的执行时间：
+import functools
+def log(time):
+    def decorator(func):
+        @functools.wraps(func)
+        def metric(*args, **kwargs):
+            print('%s executed in %s ms' % (func.__name__, time))
+            return func(*args, **kwargs)
+        return metric
+    return decorator
+
+#time = input("请输入当前代码运行的时间")
+time = 23.08
+@log(time)
+def now():
+    pass
+print(now())
