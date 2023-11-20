@@ -1,5 +1,8 @@
 #请把下面的Student对象的gender字段对外隐藏起来，
 #用get_gender()和set_gender()代替，并检查参数有效性：
+from typing import Any
+
+
 class Student(object):
     def __init__(self, name, gender):
         self.__name = name
@@ -280,3 +283,59 @@ class Chain(object):
 
     __repr__ = __str__
 
+class Chain(object):
+    
+    def __init__(self,path = ''):
+        self.path = path 
+    def __getattr__(self,path):
+        return Chain("%s/%s"%(self.path,path))
+    def __call__(self, name):
+        return Chain("%s/%s"%(self.path,name))
+    def __str__(self):
+
+        return self.path
+
+    __repr__=__str__
+
+print(Chain().users('michael').repos)
+
+#枚举类
+from enum import Enum
+
+Month = Enum('Month', ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
+for name, member in Month.__members__.items():
+    print(name, '=>', member, ',', member.value)
+
+#如果需要更精确地控制枚举类型，可以从Enum派生出自定义类：
+from enum import Enum, unique
+
+@unique
+class Weekday(Enum):
+    Sun = 0 # Sun的value被设定为0
+    Mon = 1
+    Tue = 2
+    Wed = 3
+    Thu = 4
+    Fri = 5
+    Sat = 6
+#@unique装饰器是可以帮助我们检查保障没有重复值。
+#把Student的gender属性改造为枚举类型，可以避免使用字符串：
+class Gender(Enum):
+    Male = 0
+    Female = 1
+
+class Student(object):
+    def __init__(self, name, gender):
+        self.name = name
+        self.gender = gender
+        
+bart = Student('Bart', Gender.Male)
+if bart.gender == Gender.Male:
+    print('测试通过!')
+else:
+    print('测试失败!')
+
+#使用元类
+#type函数
+#type()函数可以查看一个类型或变量的类型，
+#Hello是一个class，它的类型就是type，而h是一个实例，它的类型就是class Hello。
